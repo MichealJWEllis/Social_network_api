@@ -30,7 +30,7 @@ const thoughtController = {
             });
     },
     // POST /api/thoughts
-    createThought({ body }, res) {
+    crteThought({ body }, res) {
         Thought.create(body)
             .then(dbThoughtInfo => {
                 User.findOneAndUpdate(
@@ -66,7 +66,7 @@ const thoughtController = {
             .catch(e => res.status(500).json(e));
     },
     // PUT /api/thoughts/:id
-    updateThought({ params, body }, res) {
+    updThought({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.id },
             body,
@@ -82,7 +82,7 @@ const thoughtController = {
             .catch(e => res.status(400).json(e));
     },
     // DELETE /api/thoughts/:id
-    deleteThought({ params }, res) {
+    delThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.id })
             .then(dbThoughtInfo => {
                 if (!dbThoughtInfo) {
@@ -102,7 +102,7 @@ const thoughtController = {
     },
 
     // DELETE /api/thoughts/:id/reactions
-    deleteReaction({ params, body }, res) {
+    delReaction({ params, body }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             { $pull: { reactions: { reactionId: body.reactionId } } },

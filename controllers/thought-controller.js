@@ -35,12 +35,12 @@ const thoughtController = {
             .then(dbThoughtInfo => {
                 User.findOneAndUpdate(
                     { _id: body.userId },
-                    { $push: { thoughts: dbThoughtInfo._id } },
+                    { $push: { thoughts: dbThoughtInfo.id } },
                     { new: true }
                 )
                     .then(dbUserInfo => {
                         if (!dbUserInfo) {
-                            res.status(404).json({ message: 'No user found at this id' });
+                            res.status(404).json({ message: 'No thought found at this id' });
                             return;
                         }
                         res.json(dbUserInfo);
@@ -58,7 +58,7 @@ const thoughtController = {
         )
             .then(dbThoughtInfo => {
                 if (!dbThoughtInfo) {
-                    res.status(404).json({ message: 'No thought found at this id' });
+                    res.status(404).json({ message: 'No reaction found at this id' });
                     return;
                 }
                 res.json(dbThoughtInfo);
@@ -110,7 +110,7 @@ const thoughtController = {
         )
             .then(dbThoughtInfo => {
                 if (!dbThoughtInfo) {
-                    res.status(404).json({ message: 'No thought found at this id' });
+                    res.status(404).json({ message: 'No reaction found at this id' });
                     return;
                 }
                 res.json({ message: 'Successfully deleted reaction' });

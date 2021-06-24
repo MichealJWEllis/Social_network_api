@@ -14,11 +14,14 @@ const userController = {
     // GET /api/users/:id
     getUserById({ params }, res) {
         User.findOne({ _id: params.id })
-            .populate([
-                { path: 'thoughts', select: "-__v" },
-                { path: 'friends', select: "-__v" }
-            ])
-            .select('-__v')
+            .populate({
+                path: 'thought',
+                select: '-__v'
+            })
+            .populate({
+                path: 'friends',
+                select: '-__v'
+            })
             .then(dbUserInfo => {
                 if (!dbUserInfo) {
                     res.status(404).json({ message: 'No user found at this id' });

@@ -1,4 +1,4 @@
-const { User, Thought, Reaction } = require('../models')
+const { User, Thought } = require('../models')
 
 const thoughtController = {
     // GET /api/thoughts
@@ -32,18 +32,18 @@ const thoughtController = {
     // POST /api/thoughts
     crteThought({ body }, res) {
         Thought.create(body)
-            .then(dbThoughtInfo => {
+            .then(({ _id }) => {
                 User.findOneAndUpdate(
                     { _id: body.userId },
-                    { $push: { thoughts: dbThoughtInfo.id } },
+                    { $push: { thoughts: _id } },
                     { new: true }
                 )
-                    .then(dbUserInfo => {
-                        if (!dbUserInfo) {
-                            res.status(404).json({ message: 'No thought found at this id' });
+                    .then(dbThoughtInfo => {
+                        if (!dbThoughtInfo) {
+                            res.status(404).json({ message: 'No though found at this id' });
                             return;
                         }
-                        res.json(dbUserInfo);
+                        res.json(dbThoughtInfo);
                     })
                     .catch(e => res.json(e));
             })
@@ -101,11 +101,11 @@ const thoughtController = {
             .catch(e => res.status(500).json(e));
     },
 
-    // DELETE /api/thoughts/:id/reactions
-    delReaction({ params, body }, res) {
+    // DELETE /api/thoughts/:id/reactions/:id
+    delReaction({ params }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
-            { $pull: { reactions: { reactionId: body.reactionId } } },
+            { $pull: { reactions: { reactionId: params.reactionId } } },
             { new: true, runValidators: true }
         )
             .then(dbThoughtInfo => {

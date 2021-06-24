@@ -15,7 +15,7 @@ const reactionSchema = new Schema({
         required: true,
         maxLength: 280
     },
-    
+
     createdAt: {
         type: Date,
         default: Date.now,
@@ -24,6 +24,7 @@ const reactionSchema = new Schema({
 },
     {
         toJSON: {
+            virtuals: true,
             getters: true
         },
         id: false
